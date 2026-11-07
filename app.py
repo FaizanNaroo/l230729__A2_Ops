@@ -25,7 +25,10 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
-classifier = Classifier(os.getenv("MODEL_DIR", "models/champion"))  # loaded ONCE
+#classifier = Classifier(os.getenv("MODEL_DIR", "models/champion"))
+  # loaded ONCE
+classifier = Classifier(os.getenv("MODEL_DIR", "models/champion"),
+                        threshold=os.getenv("THRESHOLD"))  # loaded ONCE
 
 class UploadError(Exception):
     pass

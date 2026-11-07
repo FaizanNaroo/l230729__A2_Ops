@@ -6,11 +6,13 @@ import tensorflow as tf
 from preprocessing import decode_and_resize
 
 class Classifier:
-    def __init__(self, model_dir="models/champion", uncertain_margin=0.10):
+    def __init__(self, model_dir="models/champion", threshold=None, uncertain_margin=0.10):
         model_dir = Path(model_dir)
         self.model = tf.keras.models.load_model(model_dir / "model.keras")
         meta = json.loads((model_dir / "meta.json").read_text())
-        self.threshold = meta["threshold"]
+        #self.threshold = meta["threshold"]
+                # Environment variable wins; otherwise use the threshold saved with the model
+        self.threshold = round(float(threshold) if threshold else meta["threshold"], 2)
         self.img_size = meta["img_size"]
         self.model_name = f"{meta['name']} v{meta['version']} ({meta['run_name']})"
         self.margin = uncertain_margin
