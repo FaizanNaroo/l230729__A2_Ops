@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Result · VisionGuard{% endblock %}
+{% block content %}
+<section class="card">
+  <p class="muted">{{ p.filename }}</p>
+  <h1 class="verdict {{ 'ai' if p.label == 'AI-generated' else 'real' }}">{{ p.label }}</h1>
+  <p class="big">Confidence: {{ '%.1f' % (p.confidence * 100) }}%</p>
+  <table class="facts">
+    <tr><th>P(AI-generated)</th><td>{{ '%.3f' % p.prob_ai }}</td></tr>
+    <tr><th>Decision threshold</th><td>{{ '%.2f' % p.threshold }}</td></tr>
+    <tr><th>Model</th><td>{{ p.model_name }}</td></tr>
+    <tr><th>Time</th><td>{{ p.created_at.strftime('%Y-%m-%d %H:%M:%S') }} UTC</td></tr>
+  </table>
+  {% if p.uncertain %}
+  <div class="warn">⚠️ <b>Uncertain result.</b> The score is close to the decision threshold, so treat this verdict as a guess.</div>
+  {% endif %}
+  <div class="caveat">This is an automated estimate, not proof. The model is right roughly 3 times out of 4 on test images,
+    and it can be fooled by paintings, heavy editing or very realistic AI images. Do not use it alone to accuse anyone.</div>
+  <a class="button" href="{{ url_for('index') }}">Analyse another image</a>
+</section>
+{% endblock %}

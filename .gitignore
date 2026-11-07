@@ -10,3 +10,5 @@ mlruns/
 mlartifacts/
 
 tuner/
+instance/
+*.db
