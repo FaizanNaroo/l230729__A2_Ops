@@ -62,3 +62,27 @@ def unfreeze_last_block(base, start="block_16_expand"):
     for layer in base.layers[:names.index(start)]:
         layer.trainable = False
     return [l.name for l in base.layers if l.trainable]
+
+
+
+def build_transfer(backbone="mobilenet", dropout=0.3, unfrozen=0):
+    inputs = layers.Input((IMG_SIZE, IMG_SIZE, 3))
+    if backbone == "mobilenet":
+        base = tf.keras.applications.MobileNetV2(
+            input_shape=(IMG_SIZE, IMG_SIZE, 3), include_top=False, weights="imagenet")
+        x = layers.Rescaling(1 / 127.5, offset=-1, name="preprocess")(inputs)  # to [-1, 1]
+    else:
+        base = tf.keras.applications.EfficientNetB0(
+            input_shape=(IMG_SIZE, IMG_SIZE, 3), include_top=False, weights="imagenet")
+        x = inputs  # EfficientNet rescales 0-255 inputs itself
+
+    base.trainable = unfrozen > 0
+    if unfrozen > 0:
+        for layer in base.layers[:-unfrozen]:
+            layer.trainable = False
+
+    x = base(x, training=False)
+    x = layers.GlobalAveragePooling2D(name="gap")(x)
+    x = layers.Dropout(dropout, name="dropout")(x)
+    outputs = layers.Dense(1, activation="sigmoid", name="output")(x)
+    return tf.keras.Model(inputs, outputs, name=f"{backbone}_tl")

@@ -17,7 +17,23 @@ def load_image(path, label):
     img = tf.cast(tf.clip_by_value(img, 0, 255), tf.uint8)
     return img, label
 
-def make_dataset(csv_path, training=False):
+# def make_dataset(csv_path, training=False):
+#     df = pd.read_csv(csv_path)
+#     ds = tf.data.Dataset.from_tensor_slices(
+#         (df["path"].values, df["label"].values.astype("float32")))
+#     ds = ds.map(load_image, num_parallel_calls=AUTOTUNE).cache()
+#     if training:
+#         ds = ds.shuffle(len(df), seed=42, reshuffle_each_iteration=True)
+#     ds = ds.batch(BATCH)
+#     if training:
+#         ds = ds.map(lambda x, y: (augment(tf.cast(x, tf.float32), training=True), y),
+#                     num_parallel_calls=AUTOTUNE)
+#     else:
+#         ds = ds.map(lambda x, y: (tf.cast(x, tf.float32), y),
+#                     num_parallel_calls=AUTOTUNE)
+#     return ds.prefetch(AUTOTUNE)
+
+def make_dataset(csv_path, training=False, use_augment=True):
     df = pd.read_csv(csv_path)
     ds = tf.data.Dataset.from_tensor_slices(
         (df["path"].values, df["label"].values.astype("float32")))
@@ -25,7 +41,7 @@ def make_dataset(csv_path, training=False):
     if training:
         ds = ds.shuffle(len(df), seed=42, reshuffle_each_iteration=True)
     ds = ds.batch(BATCH)
-    if training:
+    if training and use_augment:
         ds = ds.map(lambda x, y: (augment(tf.cast(x, tf.float32), training=True), y),
                     num_parallel_calls=AUTOTUNE)
     else:
