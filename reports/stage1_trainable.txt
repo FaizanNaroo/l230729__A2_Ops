@@ -1,0 +1,3 @@
+Trainable base layers (0): []
+Trainable head layers: ['input_layer_2', 'mobilenet_preprocess', 'gap', 'dropout', 'output']
+Trainable params: 1,281

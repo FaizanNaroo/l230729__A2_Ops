@@ -1,0 +1,11 @@
+id,path,label,prob_ai,pred,width,height,format,mode,error
+1,data/raw/RealArt/RealArt/what-color-paintings-sell-best.jpg,0,0.93969595,1,1534,949,JPEG,RGB,0.93969595
+2,data/raw/RealArt/RealArt/getty_511618259_186076.jpg,0,0.90955997,1,1920,1080,JPEG,RGB,0.90955997
+3,data/raw/RealArt/RealArt/famous-portrait-paintings_wide-3-2-636b81a7177ce.png,0,0.8822655,1,1200,800,PNG,RGB,0.8822655
+4,data/raw/RealArt/RealArt/02-still-for-america-room-loop-superJumbo.jpg,0,0.8276666,1,2048,1365,JPEG,RGB,0.8276666
+5,data/raw/RealArt/RealArt/Mali_-_Bozo_girl_in_Bamako.jpg,0,0.8096826,1,2336,3504,JPEG,RGB,0.8096826
+6,data/raw/AiArtData/AiArtData/240201-airec-main-ksp-5625e8.jpg,1,0.11358612,0,760,380,JPEG,RGB,0.88641388
+7,data/raw/AiArtData/AiArtData/robot-art-for-web-1180x560.jpg,1,0.12923488,0,1180,560,JPEG,RGB,0.87076512
+8,data/raw/AiArtData/AiArtData/nvidia-ai-scribbles-realistic-landscapes.png,1,0.25929576,0,1200,630,PNG,RGB,0.74070424
+9,data/raw/AiArtData/AiArtData/elephant_topper_fallback.cb6ee071.png,1,0.31590354,0,1920,1080,PNG,P,0.68409646
+10,data/raw/AiArtData/AiArtData/Vincent-progress.jpg,1,0.34402058,0,1200,800,JPEG,RGB,0.65597942

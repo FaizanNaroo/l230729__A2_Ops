@@ -1,0 +1,3 @@
+Trainable base layers (11): ['block_16_expand', 'block_16_expand_BN', 'block_16_expand_relu', 'block_16_depthwise', 'block_16_depthwise_BN', 'block_16_depthwise_relu', 'block_16_project', 'block_16_project_BN', 'Conv_1', 'Conv_1_bn', 'out_relu']
+Trainable head layers: ['input_layer_2', 'mobilenet_preprocess', 'gap', 'dropout', 'output']
+Trainable params: 887,361
