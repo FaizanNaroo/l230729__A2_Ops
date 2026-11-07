@@ -1,5 +1,6 @@
 import pandas as pd
 import tensorflow as tf
+from preprocessing import decode_and_resize
 
 IMG_SIZE = 224
 BATCH = 32
@@ -11,11 +12,14 @@ augment = tf.keras.Sequential([
     tf.keras.layers.RandomZoom(0.1),
 ], name="augment")
 
+# def load_image(path, label):
+#     img = tf.io.decode_image(tf.io.read_file(path), channels=3, expand_animations=False)
+#     img = tf.image.resize(img, (IMG_SIZE, IMG_SIZE))
+#     img = tf.cast(tf.clip_by_value(img, 0, 255), tf.uint8)
+#     return img, label
+
 def load_image(path, label):
-    img = tf.io.decode_image(tf.io.read_file(path), channels=3, expand_animations=False)
-    img = tf.image.resize(img, (IMG_SIZE, IMG_SIZE))
-    img = tf.cast(tf.clip_by_value(img, 0, 255), tf.uint8)
-    return img, label
+    return decode_and_resize(tf.io.read_file(path), IMG_SIZE), label
 
 # def make_dataset(csv_path, training=False):
 #     df = pd.read_csv(csv_path)
