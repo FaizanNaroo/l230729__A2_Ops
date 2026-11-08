@@ -1,0 +1,23 @@
+
+FROM python:3.11
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1 TF_CPP_MIN_LOG_LEVEL=2
+WORKDIR /app
+
+# 1) Dependencies first: this layer is cached until requirements change
+COPY requirements-app.txt .
+RUN pip install --no-cache-dir -r requirements-app.txt
+
+# 2) Source code last: editing code doesn't reinstall packages
+COPY app.py db.py inference.py preprocessing.py ./
+COPY templates ./templates
+COPY static ./static
+
+# 3) Run as a non-root user
+RUN useradd --create-home --uid 1000 appuser
+USER appuser
+
+ENV HOST=0.0.0.0 PORT=5000 MODEL_DIR=/app/models/champion FLASK_DEBUG=0
+EXPOSE 5000
+HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
+  CMD python -c "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:5000/health',timeout=4).status==200 else 1)"
+CMD ["python", "app.py"]
