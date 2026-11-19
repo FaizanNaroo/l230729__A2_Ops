@@ -9,6 +9,7 @@ from pathlib import Path
 import numpy as np
 from flask import Flask, jsonify, request
 from PIL import Image, UnidentifiedImageError
+from urllib.parse import parse_qsl, urlencode
 
 try:
     from ai_edge_litert.interpreter import Interpreter      # small runtime (Vercel)
@@ -71,6 +72,23 @@ predict_prob(np.zeros((1, IMG_SIZE, IMG_SIZE, 3), np.float32))   # warm-up
 
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 4 * 1024 * 1024               # below Vercel's 4.5 MB
+
+class VercelPathFix:
+    """Vercel's rewrite sends every request to /api/index; restore the real path."""
+    def __init__(self, wsgi_app):
+        self.wsgi_app = wsgi_app
+
+    def __call__(self, environ, start_response):
+        params = parse_qsl(environ.get("QUERY_STRING", ""), keep_blank_values=True)
+        original = [v for k, v in params if k == "__path"]
+        if original:
+            environ["PATH_INFO"] = original[0] or "/"
+            environ["QUERY_STRING"] = urlencode([(k, v) for k, v in params if k != "__path"])
+        return self.wsgi_app(environ, start_response)
+
+
+app.wsgi_app = VercelPathFix(app.wsgi_app)
+
 
 
 @app.get("/")
