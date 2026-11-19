@@ -1,0 +1,7 @@
+{
+  "name": "visionguard",
+  "version": "4",
+  "run_name": "efficientnet",
+  "threshold": 0.7400000000000002,
+  "img_size": 224
+}

@@ -14,5 +14,4 @@ instance/
 *.db
 
 
-vercel_api/model/
 .vercel/
