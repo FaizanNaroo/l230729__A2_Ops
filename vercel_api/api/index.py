@@ -104,3 +104,10 @@ def predict():
 @app.errorhandler(413)
 def too_large(e):
     return jsonify(error="Image larger than 4 MB"), 413
+
+
+@app.route("/<path:anything>", methods=["GET", "POST"])
+def debug_path(anything):
+    # TEMPORARY: shows which path Flask actually receives on Vercel
+    return jsonify(error="no matching route", path=request.path,
+                   script_root=request.script_root, url=request.url), 404
