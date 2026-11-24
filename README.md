@@ -1,6 +1,6 @@
 # 🛡️ VisionGuard — AI-Generated vs Real Image Detection
 
-![CI](https://github.com/FaizanNaroo/l230729__A2_Ops/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/FaizanNaroo/visionguard-mlops/actions/workflows/ci.yml/badge.svg)
 ![Python](https://img.shields.io/badge/python-3.11-blue)
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-2.21-orange)
 ![MLflow](https://img.shields.io/badge/MLflow-DagsHub-0194E2)
@@ -259,8 +259,8 @@ is in [`docs/23L0729_VisionGuard.pdf`](docs/23L0729_VisionGuard.pdf).
 ## Quick start
 
 ```bash
-git clone https://github.com/FaizanNaroo/l230729__A2_Ops.git
-cd l230729__A2_Ops
+git clone https://github.com/FaizanNaroo/visionguard-mlops.git
+cd visionguard-mlops
 cp .env.example .env            # fill in passwords, API_URL and API_KEY
 
 # Option A: remote inference (uses the deployed Vercel API, no model download needed)
