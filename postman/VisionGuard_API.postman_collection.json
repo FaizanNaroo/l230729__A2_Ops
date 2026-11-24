@@ -1,0 +1,105 @@
+{
+  "info": {
+    "name": "l230729_A2_Ops - VisionGuard API",
+    "description": "Task 7 tests for the VisionGuard model API on Vercel and Task 8 checks for the local Flask app. Set the collection variable api_key in Postman (Current value only) - never commit it.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "https://l230729-a2-ops.vercel.app" },
+    { "key": "flask_url", "value": "http://127.0.0.1:5000" },
+    { "key": "api_key", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "1. API health",
+      "request": { "method": "GET", "url": "{{base_url}}/health" },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('status 200', () => pm.response.to.have.status(200));",
+        "pm.test('reports model and threshold', () => {",
+        "  const j = pm.response.json();",
+        "  pm.expect(j.status).to.eql('ok');",
+        "  pm.expect(j).to.have.property('model');",
+        "  pm.expect(j).to.have.property('threshold');",
+        "});"
+      ] } }]
+    },
+    {
+      "name": "2. Predict - valid image (choose a file)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "X-API-Key", "value": "{{api_key}}" }],
+        "url": "{{base_url}}/predict",
+        "body": { "mode": "formdata", "formdata": [{ "key": "image", "type": "file", "src": [] }] }
+      },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('status 200', () => pm.response.to.have.status(200));",
+        "pm.test('returns a verdict', () => {",
+        "  const j = pm.response.json();",
+        "  pm.expect(['AI-generated', 'Real']).to.include(j.label);",
+        "  pm.expect(j.prob_ai).to.be.within(0, 1);",
+        "  pm.expect(j.confidence).to.be.within(0, 1);",
+        "});"
+      ] } }]
+    },
+    {
+      "name": "3. Predict - missing API key -> 401",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/predict",
+        "body": { "mode": "formdata", "formdata": [{ "key": "image", "type": "file", "src": [] }] }
+      },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('rejected without key', () => pm.response.to.have.status(401));"
+      ] } }]
+    },
+    {
+      "name": "4. Predict - wrong API key -> 401",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "X-API-Key", "value": "wrong-key" }],
+        "url": "{{base_url}}/predict",
+        "body": { "mode": "formdata", "formdata": [{ "key": "image", "type": "file", "src": [] }] }
+      },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('rejected with wrong key', () => pm.response.to.have.status(401));"
+      ] } }]
+    },
+    {
+      "name": "5. Predict - not an image -> 400",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "X-API-Key", "value": "{{api_key}}" }],
+        "url": "{{base_url}}/predict",
+        "body": { "mode": "formdata", "formdata": [{ "key": "image", "type": "text", "value": "this is not an image" }] }
+      },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('bad input rejected', () => pm.response.to.have.status(400));"
+      ] } }]
+    },
+    {
+      "name": "6. Unknown route -> JSON 404",
+      "request": { "method": "GET", "url": "{{base_url}}/nope" },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('404', () => pm.response.to.have.status(404));"
+      ] } }]
+    },
+    {
+      "name": "7. Flask health (local, Task 8)",
+      "request": { "method": "GET", "url": "{{flask_url}}/health" },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('Flask is up and uses the remote API', () => {",
+        "  const j = pm.response.json();",
+        "  pm.expect(j.inference.mode).to.eql('remote');",
+        "  pm.expect(j.inference.reachable).to.be.true;",
+        "});"
+      ] } }]
+    },
+    {
+      "name": "8. Flask database trail (local, Task 8)",
+      "request": { "method": "GET", "url": "{{flask_url}}/api/history?limit=10" },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('history is a list', () => pm.expect(pm.response.json()).to.be.an('array'));"
+      ] } }]
+    }
+  ]
+}

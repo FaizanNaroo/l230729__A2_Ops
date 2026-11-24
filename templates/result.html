@@ -9,6 +9,7 @@
     <tr><th>P(AI-generated)</th><td>{{ '%.3f' % p.prob_ai }}</td></tr>
     <tr><th>Decision threshold</th><td>{{ '%.2f' % p.threshold }}</td></tr>
     <tr><th>Model</th><td>{{ p.model_name }}</td></tr>
+    <tr><th>Latency</th><td>{{ p.latency_ms }} ms</td></tr>
     <tr><th>Time</th><td>{{ p.created_at.strftime('%Y-%m-%d %H:%M:%S') }} UTC</td></tr>
   </table>
   {% if p.uncertain %}

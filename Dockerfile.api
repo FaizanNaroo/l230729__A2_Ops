@@ -1,0 +1,14 @@
+FROM python:3.11-slim
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1 TF_CPP_MIN_LOG_LEVEL=2
+WORKDIR /app
+COPY requirements-app.txt .
+RUN pip install --no-cache-dir -r requirements-app.txt gunicorn
+COPY api.py inference.py preprocessing.py ./
+COPY models/champion ./models/champion
+RUN useradd --create-home --uid 1000 appuser
+USER appuser
+ENV PORT=8000 MODEL_DIR=/app/models/champion
+EXPOSE 8000
+HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
+  CMD python -c "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health',timeout=4).status==200 else 1)"
+CMD ["sh", "-c", "gunicorn -w 1 --threads 4 --timeout 120 -b 0.0.0.0:${PORT} api:app"]

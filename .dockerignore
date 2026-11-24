@@ -1,0 +1,15 @@
+venv/
+.git/
+data/
+models/*
+!models/champion/
+reports/
+tuner/
+mlruns/
+mlartifacts/
+mlflow.db
+instance/
+__pycache__/
+*.pyc
+.env
+.dvc/

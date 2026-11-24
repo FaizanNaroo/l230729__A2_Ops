@@ -1,0 +1,9 @@
+file,true_label,predicted,prob_ai,confidence,uncertain,threshold,model,round_trip_ms,db_id
+data/raw/RealArt/RealArt/Opossum-with-babies.jpg,Real,Real,0.4116,0.5884,False,0.74,visionguard v4 (efficientnet) @ Vercel,1629,3
+data/raw/RealArt/RealArt/final_credit-alamy-1.jpg,Real,Real,0.2397,0.7603,False,0.74,visionguard v4 (efficientnet) @ Vercel,2216,4
+data/raw/RealArt/RealArt/the-essay_58_resurgence-of-the-people_2019-article-image.jpg,Real,Real,0.1643,0.8357,False,0.74,visionguard v4 (efficientnet) @ Vercel,1476,5
+data/raw/RealArt/RealArt/what-color-paintings-sell-best.jpg,Real,AI-generated,0.975,0.975,False,0.74,visionguard v4 (efficientnet) @ Vercel,1514,6
+data/raw/AiArtData/AiArtData/ath-flowers-vivid-colors-generative-ai-landscape-painting-mountain-281590810.jpg,AI-generated,Real,0.5201,0.4799,False,0.74,visionguard v4 (efficientnet) @ Vercel,1608,7
+data/raw/AiArtData/AiArtData/4hPwM82KpnA0Rie1400A.jpg,AI-generated,AI-generated,0.9579,0.9579,False,0.74,visionguard v4 (efficientnet) @ Vercel,666,8
+data/raw/AiArtData/AiArtData/59e0ba50419705a2c4b22681fb.jpg,AI-generated,Real,0.4596,0.5404,False,0.74,visionguard v4 (efficientnet) @ Vercel,1493,9
+data/raw/AiArtData/AiArtData/2022-11-10-image-12.jpg,AI-generated,AI-generated,0.9866,0.9866,False,0.74,visionguard v4 (efficientnet) @ Vercel,1791,10

@@ -1,0 +1,45 @@
+name: l230729_a2_ops
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+    # no "ports:" -> the database is only reachable inside the Compose network
+
+  web:
+    build: .
+    image: l230729_a2_ops-web
+    environment:
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      SECRET_KEY: ${SECRET_KEY}
+      THRESHOLD: ${THRESHOLD}
+      MAX_UPLOAD_MB: ${MAX_UPLOAD_MB}
+
+      # Task 8: remote = Flask forwards uploads to the model API on Vercel
+      INFERENCE_MODE: ${INFERENCE_MODE:-local}
+      API_URL: ${API_URL:-}
+      API_KEY: ${API_KEY:-}
+      API_TIMEOUT: ${API_TIMEOUT:-30}
+
+    volumes:
+      - ./models/champion:/app/models/champion:ro
+    ports:
+      - "5000:5000"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  pgdata:

@@ -30,6 +30,7 @@ def client(tmp_path_factory):
                 "threshold": 0.5,
                 "img_size": 224}))
     os.environ["MODEL_DIR"] = str(model_dir)
+    os.environ["INFERENCE_MODE"] = "local"   # never call the real API from tests
     os.environ["DATABASE_URL"] = "sqlite:///" + \
         (tmp_path_factory.mktemp("db") / "t.db").as_posix()
     import app as app_module

@@ -3,10 +3,12 @@
 {% block content %}
 <section class="card">
   <h1>Prediction history</h1>
+  <p class="muted">Every request is stored in the database: what was decided, when, by which model and how confidently.
+    Showing the latest {{ rows|length }} records.</p>
   {% if rows %}
   <div class="table-wrap">
   <table class="history">
-    <thead><tr><th>Time (UTC)</th><th>File</th><th>Verdict</th><th>Confidence</th><th>P(AI)</th><th>Model</th></tr></thead>
+    <thead><tr><th>Time (UTC)</th><th>File</th><th>Verdict</th><th>Confidence</th><th>P(AI)</th><th>Threshold</th><th>Model</th><th>Latency</th></tr></thead>
     <tbody>
     {% for r in rows %}
       <tr>
@@ -15,7 +17,9 @@
         <td class="{{ 'ai' if r.label == 'AI-generated' else 'real' }}">{{ r.label }}{% if r.uncertain %} ⚠️{% endif %}</td>
         <td>{{ '%.1f' % (r.confidence * 100) }}%</td>
         <td>{{ '%.3f' % r.prob_ai }}</td>
+        <td>{{ '%.2f' % r.threshold }}</td>
         <td>{{ r.model_name }}</td>
+        <td>{{ r.latency_ms }} ms</td>
       </tr>
     {% endfor %}
     </tbody>

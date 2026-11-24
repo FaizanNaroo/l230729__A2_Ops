@@ -16,6 +16,6 @@
     </nav>
   </header>
   <main class="container">{% block content %}{% endblock %}</main>
-  <footer>Model: {{ model_name }}</footer>
+  <footer>Model: {{ model_name }} · Inference: {{ 'remote API (Vercel)' if inference_mode == 'remote' else 'local Keras model' }}</footer>
 </body>
 </html>

@@ -11,7 +11,7 @@ jobs:
           python-version: "3.11"
           cache: pip
       - run: pip install -r requirements-app.txt flake8 pytest
-      - run: flake8 app.py db.py inference.py preprocessing.py tests --max-line-length 120
+      - run: flake8 app.py db.py inference.py preprocessing.py task8_demo.py tests --max-line-length 120
       - run: pytest -q
 
   docker:

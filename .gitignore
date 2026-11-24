@@ -15,3 +15,5 @@ instance/
 
 
 .vercel/
+# separate throwaway repo for the Task 6.6 toy CI exercise
+ci-toy/
